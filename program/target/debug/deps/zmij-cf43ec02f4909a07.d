@@ -1,0 +1,9 @@
+/mnt/d/fundra/program/target/debug/deps/zmij-cf43ec02f4909a07.d: /home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/lib.rs /home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/stdarch_x86.rs /home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/traits.rs
+
+/mnt/d/fundra/program/target/debug/deps/libzmij-cf43ec02f4909a07.rlib: /home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/lib.rs /home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/stdarch_x86.rs /home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/traits.rs
+
+/mnt/d/fundra/program/target/debug/deps/libzmij-cf43ec02f4909a07.rmeta: /home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/lib.rs /home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/stdarch_x86.rs /home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/traits.rs
+
+/home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/lib.rs:
+/home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/stdarch_x86.rs:
+/home/dweet/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.23/src/traits.rs:
