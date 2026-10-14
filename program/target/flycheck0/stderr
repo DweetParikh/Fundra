@@ -362,3 +362,101 @@ Stack backtrace:
   15: std::panicking::catch_unwind::do_call
              at /rustc/f8297e351a40c1439a467bbbb6879088047f50b3/library/std/src/panicking.rs:590:40
   16: std::panicking::catch_unwind
+             at /rustc/f8297e351a40c1439a467bbbb6879088047f50b3/library/std/src/panicking.rs:553:19
+  17: std::panic::catch_unwind
+             at /rustc/f8297e351a40c1439a467bbbb6879088047f50b3/library/std/src/panic.rs:359:14
+  18: std::rt::lang_start_internal::{{closure}}
+             at /rustc/f8297e351a40c1439a467bbbb6879088047f50b3/library/std/src/rt.rs:175:24
+  19: std::panicking::catch_unwind::do_call
+             at /rustc/f8297e351a40c1439a467bbbb6879088047f50b3/library/std/src/panicking.rs:590:40
+  20: std::panicking::catch_unwind
+             at /rustc/f8297e351a40c1439a467bbbb6879088047f50b3/library/std/src/panicking.rs:553:19
+  21: std::panic::catch_unwind
+             at /rustc/f8297e351a40c1439a467bbbb6879088047f50b3/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal
+             at /rustc/f8297e351a40c1439a467bbbb6879088047f50b3/library/std/src/rt.rs:171:5
+  23: main
+  24: <unknown>
+  25: __libc_start_main
+  26: <unknown>
+    Checking serde_core v1.0.229
+    Checking borsh v0.10.4
+   Compiling libsecp256k1 v0.6.0
+    Checking num_enum v0.7.6
+    Checking solana-borsh v2.2.1
+    Checking serde v1.0.229
+    Checking serde_json v1.0.151
+    Checking serde_bytes v0.11.19
+    Checking solana-hash v2.3.0
+    Checking curve25519-dalek v4.1.3
+    Checking bincode v1.3.3
+    Checking solana-short-vec v2.2.1
+    Checking solana-fee-calculator v2.2.1
+    Checking bv v0.11.1
+    Checking solana-serde-varint v2.2.2
+    Checking kaigan v0.3.0
+    Checking rmp-serde v1.3.0
+    Checking solana-sha256-hasher v2.3.0
+    Checking solana-keccak-hasher v2.2.1
+    Checking solana-blake3-hasher v2.2.1
+    Checking solana-pubkey v2.4.0
+    Checking solana-curve25519 v2.3.13
+    Checking solana-instruction v2.3.3
+    Checking solana-sdk-ids v2.2.1
+    Checking solana-nonce v2.2.1
+    Checking solana-sysvar-id v2.2.1
+    Checking solana-clock v2.2.3
+    Checking solana-slot-hashes v2.2.1
+    Checking solana-rent v2.2.1
+    Checking solana-slot-history v2.2.1
+    Checking solana-epoch-schedule v2.2.1
+    Checking solana-epoch-rewards v2.2.1
+    Checking solana-last-restart-slot v2.2.1
+    Checking solana-program-error v2.2.2
+    Checking solana-transaction-error v2.2.1
+    Checking solana-system-interface v1.0.0
+    Checking solana-serialize-utils v2.2.1
+    Checking solana-bincode v2.2.1
+    Checking solana-loader-v2-interface v2.2.1
+    Checking solana-signer v2.2.1
+    Checking solana-stable-layout v2.2.1
+    Checking spl-associated-token-account-client v2.0.0
+    Checking solana-address-lookup-table-interface v2.2.2
+    Checking solana-account-info v2.3.0
+    Checking solana-program-pack v2.2.1
+    Checking spl-discriminator v0.4.1
+    Checking solana-loader-v4-interface v2.2.1
+    Checking solana-vote-interface v2.2.6
+    Checking solana-message v2.4.0
+    Checking solana-loader-v3-interface v5.0.0
+    Checking solana-program-entrypoint v2.3.0
+    Checking solana-cpi v2.2.1
+    Checking solana-instructions-sysvar v2.2.2
+    Checking solana-account v2.2.1
+    Checking solana-zk-sdk v2.3.13
+    Checking solana-stake-interface v1.2.1
+    Checking spl-memo v6.0.0
+    Checking solana-feature-gate-interface v2.2.2
+    Checking solana-example-mocks v2.2.1
+    Checking solana-sysvar v2.3.0
+    Checking spl-pod v0.5.1
+    Checking spl-token-confidential-transfer-proof-generation v0.2.0
+    Checking spl-token-confidential-transfer-ciphertext-arithmetic v0.2.1
+    Checking spl-type-length-value v0.7.0
+    Checking spl-token-group-interface v0.5.0
+    Checking spl-token-metadata-interface v0.6.0
+    Checking solana-secp256k1-recover v2.2.1
+    Checking solana-program v2.3.0
+    Checking spl-program-error v0.6.0
+    Checking spl-token-confidential-transfer-proof-extraction v0.2.1
+    Checking spl-token v7.0.0
+    Checking anchor-lang v0.31.1
+    Checking mpl-core v0.11.2
+    Checking spl-tlv-account-resolution v0.9.0
+    Checking spl-elgamal-registry v0.1.1
+    Checking spl-transfer-hook-interface v0.9.0
+    Checking spl-token-2022 v6.0.0
+    Checking spl-associated-token-account v6.0.0
+    Checking anchor-spl v0.31.1
+    Checking fundra v0.1.0 (/mnt/d/fundra/program/programs/fundra)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 34s
