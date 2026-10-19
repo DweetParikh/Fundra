@@ -51,13 +51,10 @@ export function formatCountdown(unixTarget: number, nowMs = Date.now()): string 
   return `${m}m ${s - m * 60}s left`;
 }
 
-/** Reward rate shown as "X reward tokens per 1 contribution token". */
+/** Reward rate shown in the mockup's "1:10" form: numerator:denominator (reward units : contribution units). */
 export function formatRewardRate(num: BN, den: BN): string {
-  if (num.isZero()) return "No reward";
-  const n = Number(num.toString());
-  const d = Number(den.toString());
-  const r = n / d;
-  return `${Number.isInteger(r) ? r : r.toFixed(4)} reward per 1 token`;
+  if (num.isZero()) return "None";
+  return `${num.toString()}:${den.toString()}`;
 }
 
 /** Mirrors Campaign::tranche_amount in the program: last tranche takes the rounding remainder. */

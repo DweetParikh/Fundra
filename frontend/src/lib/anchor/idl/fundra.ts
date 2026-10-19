@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/fundra.json`.
  */
 export type Fundra = {
-  "address": "Gi3TATmmgMsCAZadWqHBa8sJw6YxHa9fuYaQHcK4Ks8D",
+  "address": "eeEHS96DDoJSf2jX2GwSQdVQwcYZtgkqfY8V6UECn5F",
   "metadata": {
     "name": "fundra",
     "version": "0.1.0",

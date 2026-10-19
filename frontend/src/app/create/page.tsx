@@ -5,7 +5,7 @@ import { PublicKey } from "@solana/web3.js";
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { useFundraProgram } from "@/hooks/useFundraProgram";
 import { parseMint, type MintInfo } from "@/hooks/useCampaign";
-import { Card, Field, Notice, SectionTitle, TxButton } from "@/components/ui";
+import { Card, Field, Notice, SectionTitle, TxButton, Badge } from "@/components/ui";
 import { formatAmount, parseAmount } from "@/lib/format";
 import { createCampaignTx } from "@/lib/tx";
 import { platformConfigPda } from "@/lib/anchor/pdas";
@@ -121,125 +121,143 @@ export default function CreatePage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-white">Create a campaign</h1>
-        <p className="mt-2 text-sm text-neutral-400">
-          The campaign is created as a draft. You review it and activate it on the next page; activation locks every
-          term permanently.
-        </p>
+    <div className="space-y-8">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-[32px] font-semibold tracking-tight text-white">Create campaign</h1>
+          <p className="mt-2 text-sm text-neutral-500">
+            Launch a milestone-gated campaign on Solana Devnet. Created as a draft; activation locks every term.
+          </p>
+        </div>
+        <span className="pill text-neutral-200">
+          <span className="h-1.5 w-1.5 rounded-full bg-white" />
+          Devnet only
+        </span>
       </div>
 
-      <Card>
-        <SectionTitle>Contribution token</SectionTitle>
-        <Field
-          label="Devnet SPL token mint address"
-          hint="Contributors pay in this one token. It is locked once the campaign is activated."
-        >
-          <input className="input font-mono" placeholder="Mint address" value={mintStr} onChange={(e) => setMintStr(e.target.value)} />
-        </Field>
-        <div className="mt-3 text-sm">
-          {mint.kind === "checking" && <span className="text-neutral-500">Checking mint...</span>}
-          {mint.kind === "error" && <span className="text-neutral-300">Error: {mint.msg}</span>}
-          {mint.kind === "ok" && (
-            <span className="text-neutral-300">
-              Valid classic SPL Token mint. Decimals: {mint.info.decimals}. Supply: {formatAmount(mint.info.supply, mint.info.decimals)}. No freeze authority.
-            </span>
-          )}
-        </div>
-      </Card>
+      <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+        <div className="space-y-6">
+          <Card>
+            <SectionTitle>Campaign details</SectionTitle>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Field label="Campaign title">
+                <input className="input" maxLength={32} value={name} onChange={(e) => setName(e.target.value)} placeholder="Modular solar microgrids" />
+              </Field>
+              <Field label="Metadata URI" hint="Optional. Used for the receipt NFTs and collection.">
+                <input className="input" maxLength={128} value={uri} onChange={(e) => setUri(e.target.value)} placeholder="https://..." />
+              </Field>
+              <div className="sm:col-span-2">
+                <Field label="Contribution token mint (SPL, classic)" hint="Locked once the campaign is activated.">
+                  <input className="input font-mono text-xs" placeholder="Mint address" value={mintStr} onChange={(e) => setMintStr(e.target.value)} />
+                </Field>
+                <div className="mt-2 text-xs">
+                  {mint.kind === "checking" && <span className="text-neutral-500">Checking mint...</span>}
+                  {mint.kind === "error" && <span className="text-neutral-300">{mint.msg}</span>}
+                  {mint.kind === "ok" && (
+                    <span className="text-neutral-400">
+                      Valid classic SPL mint. Decimals {mint.info.decimals}. Supply {formatAmount(mint.info.supply, mint.info.decimals)}. No freeze authority.
+                    </span>
+                  )}
+                </div>
+              </div>
+              <Field label={`Funding goal${decimals !== null ? "" : " (pick a mint first)"}`} hint="Below this, everyone is refunded.">
+                <input className="input" inputMode="decimal" disabled={decimals === null} value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="0.0" />
+              </Field>
+              <Field label="Max funding" hint="Contributions stop at this total.">
+                <input className="input" inputMode="decimal" disabled={decimals === null} value={max} onChange={(e) => setMax(e.target.value)} placeholder="0.0" />
+              </Field>
+              <Field label="Deadline" hint="Local time.">
+                <input className="input" type="datetime-local" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
+              </Field>
+              <Field label="Reward supply cap" hint="Max funding times the reward rate.">
+                <input className="input" disabled value={rewardCap ?? "-"} readOnly />
+              </Field>
+              <Field label="Reward rate (numerator)">
+                <input className="input" inputMode="numeric" value={rateNum} onChange={(e) => setRateNum(e.target.value)} />
+              </Field>
+              <Field label="Reward rate (denominator)" hint="Shown as numerator:denominator.">
+                <input className="input" inputMode="numeric" value={rateDen} onChange={(e) => setRateDen(e.target.value)} />
+              </Field>
+            </div>
+          </Card>
 
-      <Card>
-        <SectionTitle>Campaign</SectionTitle>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Name">
-            <input className="input" maxLength={32} value={name} onChange={(e) => setName(e.target.value)} placeholder="Campaign name" />
-          </Field>
-          <Field label="Metadata URI" hint="Optional. Used for the receipt NFTs and collection.">
-            <input className="input" maxLength={128} value={uri} onChange={(e) => setUri(e.target.value)} placeholder="https://..." />
-          </Field>
-          <Field label={`Goal${decimals !== null ? "" : " (select a mint first)"}`} hint="Minimum raise. Below this, everyone is refunded.">
-            <input className="input" inputMode="decimal" disabled={decimals === null} value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="0.0" />
-          </Field>
-          <Field label="Max funding" hint="Contributions stop at this total.">
-            <input className="input" inputMode="decimal" disabled={decimals === null} value={max} onChange={(e) => setMax(e.target.value)} placeholder="0.0" />
-          </Field>
-          <Field label="Deadline" hint="Local time. Funding closes here and the goal is evaluated.">
-            <input className="input" type="datetime-local" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
-          </Field>
-        </div>
-      </Card>
-
-      <Card>
-        <SectionTitle>Rewards</SectionTitle>
-        <div className="grid items-end gap-4 sm:grid-cols-2">
-          <Field label="Rate numerator">
-            <input className="input" inputMode="numeric" value={rateNum} onChange={(e) => setRateNum(e.target.value)} />
-          </Field>
-          <Field label="Rate denominator" hint="Reward tokens per 1 whole contribution token = numerator / denominator.">
-            <input className="input" inputMode="numeric" value={rateDen} onChange={(e) => setRateDen(e.target.value)} />
-          </Field>
-        </div>
-        <p className="mt-3 text-xs text-neutral-500">
-          Rewards are recorded as pending at contribution time and become claimable only after the campaign completes.
-          {rewardCap && <> Supply cap: {rewardCap} reward tokens (max funding times rate).</>}
-        </p>
-      </Card>
-
-      <Card>
-        <SectionTitle
-          right={
-            <span className={`text-xs ${pctSum === 100 ? "text-neutral-300" : "text-neutral-500"}`}>Total {pctSum} / 100</span>
-          }
-        >
-          Milestones
-        </SectionTitle>
-        <p className="mb-4 text-xs text-neutral-500">
-          Milestone 1 is released to you without a vote once the campaign is funded. Every later milestone needs
-          contributor approval.
-        </p>
-        <div className="space-y-2">
-          {pcts.map((p, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <span className="w-24 text-sm text-neutral-400">Milestone {i + 1}</span>
-              <input
-                className="input max-w-[140px]"
-                inputMode="numeric"
-                value={p}
-                onChange={(e) => setPcts(pcts.map((x, j) => (j === i ? e.target.value : x)))}
-              />
-              <span className="text-sm text-neutral-500">%</span>
-              {pcts.length > 1 && (
-                <button className="text-xs text-neutral-500 hover:text-white" onClick={() => setPcts(pcts.filter((_, j) => j !== i))}>
-                  Remove
-                </button>
+          <Card>
+            <SectionTitle
+              right={<span className={`text-xs ${pctSum === 100 ? "text-neutral-300" : "text-neutral-500"}`}>Total {pctSum} / 100</span>}
+            >
+              Milestone funding split
+            </SectionTitle>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {pcts.map((p, i) => (
+                <div key={i} className="panel-sm p-3">
+                  <div className="text-[11px] text-neutral-500">Milestone {i}</div>
+                  <div className="mt-2 flex items-center gap-1.5">
+                    <input
+                      className="w-full bg-transparent text-lg font-semibold text-white outline-none"
+                      inputMode="numeric"
+                      value={p}
+                      onChange={(e) => setPcts(pcts.map((x, j) => (j === i ? e.target.value : x)))}
+                    />
+                    <span className="text-neutral-500">%</span>
+                  </div>
+                  {pcts.length > 1 && (
+                    <button className="mt-2 text-[11px] text-neutral-600 hover:text-white" onClick={() => setPcts(pcts.filter((_, j) => j !== i))}>
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+              <p className="text-xs text-neutral-500">Milestone 0 releases to the founder once funded, without a vote. Later milestones need approval.</p>
+              {pcts.length < MAX_MILESTONES && (
+                <button className="btn btn-ghost" onClick={() => setPcts([...pcts, "0"])}>Add milestone</button>
               )}
             </div>
-          ))}
-        </div>
-        {pcts.length < MAX_MILESTONES && (
-          <button className="btn btn-ghost mt-4" onClick={() => setPcts([...pcts, "0"])}>
-            Add milestone
-          </button>
-        )}
-      </Card>
+          </Card>
 
-      {!publicKey && <Notice>Connect a Devnet wallet to create the campaign.</Notice>}
-      {problems.length > 0 && (
-        <Notice>
-          <ul className="list-disc space-y-1 pl-5">
-            {problems.map((p) => (
-              <li key={p}>{p}</li>
-            ))}
-          </ul>
-        </Notice>
-      )}
-      <TxButton
-        label="Create campaign (draft)"
-        disabled={!publicKey || problems.length > 0}
-        run={submit}
-        onDone={() => created.current && router.push(`/campaign/${created.current.toBase58()}`)}
-      />
+          {!publicKey && <Notice>Connect a Devnet wallet to create the campaign.</Notice>}
+          {problems.length > 0 && (
+            <Notice>
+              <ul className="list-disc space-y-1 pl-5">
+                {problems.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+            </Notice>
+          )}
+          <div className="flex flex-wrap items-center justify-end gap-3">
+            <TxButton
+              label="Create campaign"
+              disabled={!publicKey || problems.length > 0}
+              run={submit}
+              onDone={() => created.current && router.push(`/campaign/${created.current.toBase58()}`)}
+            />
+          </div>
+        </div>
+
+        <aside className="space-y-6">
+          <Card>
+            <div className="mb-3 flex items-center gap-2 text-sm font-medium text-white">
+              <Badge kind="draft">Devnet notice</Badge>
+            </div>
+            <p className="text-xs leading-relaxed text-neutral-500">
+              Fundra is currently live on Solana Devnet only. Use devnet SOL and test tokens. No real value is at risk.
+            </p>
+          </Card>
+          <Card>
+            <SectionTitle>Security checklist</SectionTitle>
+            <ul className="space-y-3 text-xs leading-relaxed text-neutral-400">
+              <li>Contributions held in a program-controlled vault</li>
+              <li>Terms locked on campaign activation</li>
+              <li>Classic SPL Token only (no Token-2022)</li>
+              <li>Token must not have a freeze authority</li>
+              <li>Refunds enabled if the target is not met</li>
+              <li>Reward mint created as a program PDA</li>
+            </ul>
+          </Card>
+        </aside>
+      </div>
     </div>
   );
 }

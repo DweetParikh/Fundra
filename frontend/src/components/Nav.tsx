@@ -2,47 +2,62 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
+import { useFundraProgram } from "@/hooks/useFundraProgram";
+import { shortKey } from "@/lib/format";
 
-// The wallet button touches window; load it on the client only.
 const WalletMultiButton = dynamic(
   async () => (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
   { ssr: false }
 );
 
 const links = [
-  { href: "/", label: "Campaigns" },
-  { href: "/create", label: "Create" },
-  { href: "/dashboard/maker", label: "Maker" },
-  { href: "/dashboard/contributor", label: "Contributor" },
+  { href: "/", label: "Overview" },
+  { href: "/#protocol", label: "Protocol" },
 ];
 
-export default function Nav() {
+export default function Nav({ network }: { network: "devnet" | "checking" | "error" }) {
   const path = usePathname();
+  const { publicKey } = useFundraProgram();
+  const pillTone =
+    network === "devnet" ? "text-neutral-200" : network === "checking" ? "text-neutral-500" : "text-neutral-400";
+
   return (
-    <header className="border-b border-white/5">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
-        <div className="flex items-center gap-8">
-          <Link href="/" className="text-lg font-semibold tracking-tight text-white">
+    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#050506]/80 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-5 py-3.5">
+        <div className="flex items-center gap-10">
+          <Link href="/" className="text-[17px] font-semibold tracking-tight text-white">
             Fundra
           </Link>
-          <nav className="flex gap-1">
-            {links.map((l) => {
-              const active = l.href === "/" ? path === "/" : path.startsWith(l.href);
-              return (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className={`rounded-lg px-3 py-1.5 text-sm transition ${
-                    active ? "bg-white/10 text-white" : "text-neutral-400 hover:text-white"
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              );
-            })}
+          <nav className="hidden items-center gap-7 md:flex">
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={`text-sm transition ${path === l.href ? "text-white" : "text-neutral-400 hover:text-white"}`}
+              >
+                {l.label}
+              </Link>
+            ))}
           </nav>
         </div>
-        <WalletMultiButton />
+
+        <div className="flex items-center gap-2.5">
+          <span className={`pill ${pillTone}`}>
+            <span className={`h-1.5 w-1.5 rounded-full ${network === "devnet" ? "bg-white" : "bg-neutral-600"}`} />
+            Devnet only
+          </span>
+          {publicKey && (
+            <>
+              <Link href="/dashboard/maker" className="pill hidden hover:text-white sm:inline-flex">
+                Founder / {shortKey(publicKey, 4)}
+              </Link>
+              <Link href="/dashboard/contributor" className="pill hidden hover:text-white sm:inline-flex">
+                Contributor
+              </Link>
+            </>
+          )}
+          <WalletMultiButton />
+        </div>
       </div>
     </header>
   );
